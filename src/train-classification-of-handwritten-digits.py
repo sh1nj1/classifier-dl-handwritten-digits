@@ -5,6 +5,7 @@ from keras.utils import to_categorical
 from keras.models import Sequential
 from keras.layers import Dense, Dropout, Flatten
 from keras.layers import Conv2D, MaxPooling2D
+from keras.preprocessing.image import ImageDataGenerator
 
 # load the MNIST dataset
 (x_train, y_train), (x_test, y_test) = mnist.load_data()
@@ -37,7 +38,20 @@ model.add(Dense(10, activation='softmax'))
 
 # compile and fit the model
 model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
-model.fit(x_train, y_train, batch_size=128, epochs=10, verbose=1, validation_data=(x_test, y_test))
+
+# create an instance of the ImageDataGenerator class
+datagen = ImageDataGenerator(
+    rotation_range=30,
+    width_shift_range=0.2,
+    height_shift_range=0.1,
+    zoom_range=0.3
+)
+# fit the data generator to the training data
+datagen.fit(x_train)
+
+# use the flow() method to generate augmented data
+# specify the number of epochs to run and the batch size
+model.fit_generator(datagen.flow(x_train, y_train, batch_size=128), epochs=10, verbose=1, validation_data=(x_test, y_test))
 
 model.save('./model.h5')
 

@@ -14,7 +14,7 @@ Finally, the script loads the trained machine learning model and uses it to make
 
 ## python libraries
 
-`pip install numpy keras tensorflow`
+`pip install numpy keras tensorflow scipy`
 
 ## run
 
